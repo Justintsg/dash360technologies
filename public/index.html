@@ -14,7 +14,7 @@
     .wrap { width:min(1160px,calc(100% - 40px)); margin:auto; }
     header { border-bottom:1px solid #344036; background:#0b100d; }
     header .wrap { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:12px 0; }
-    .brand img { width:130px; height:80px; object-fit:contain; }
+    .brand img { width:240px; height:140px; object-fit:cover; object-position:center; filter:brightness(1.4); }
     nav { display:flex; gap:25px; align-items:center; }
     nav a { font-size:14px; text-decoration:none; }
     nav a:hover, footer a:hover { color:var(--green); }
@@ -49,6 +49,18 @@
     .contact p { max-width:650px; }
     .contact .button { background:#10200a; color:white; margin-right:20px; }
     .contact .phone { font-size:21px; font-weight:bold; white-space:nowrap; }
+    .future { border:1px solid #354438; background:var(--panel); padding:30px; margin-top:25px; }
+    .future p { color:var(--muted); }
+    .request { background:#111a13; }
+    .request form { max-width:760px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .request label { display:flex; flex-direction:column; gap:7px; font-size:14px; font-weight:bold; }
+    .request input,.request select,.request textarea { width:100%; padding:13px; border:1px solid #617462; background:#fff; color:#142016; font:inherit; border-radius:3px; }
+    .request .full { grid-column:1/-1; }
+    .request button { border:0; cursor:pointer; justify-self:start; margin:0; }
+    .request [hidden] { display:none; }
+    .request .note { color:var(--muted); font-size:14px; }
+    #form-status { min-height:1.5em; color:var(--green); }
+    #form-status.error { color:#ffaaaa; }
     footer { padding:35px 0; }
     footer .wrap { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; color:#9fb2a2; font-size:13px; }
     footer a { text-decoration:none; }
@@ -59,7 +71,8 @@
     }
     @media(max-width:520px) {
       .hero,section.content,.contact { padding:60px 0; }
-      .brand img { width:95px; height:65px; }
+      .brand img { width:170px; height:100px; }
+      .request form { grid-template-columns:1fr; }
       .cards { grid-template-columns:1fr; }
       .contact .phone { display:block; margin-top:20px; }
     }
@@ -74,6 +87,7 @@
       <nav aria-label="Main navigation">
         <a href="#services">Services</a>
         <a href="#process">Our process</a>
+        <a href="#products">Products & reviews</a>
         <a href="#about">About</a>
         <a class="nav-button" href="#contact">Request a quote</a>
       </nav>
@@ -102,7 +116,7 @@
           <article class="card"><span>01 / VIDEO</span><h3>Dash & AI cameras</h3><p>Forward-facing, dual-facing and multi-camera systems with carefully routed wiring.</p></article>
           <article class="card"><span>02 / LOCATION</span><h3>GPS & telematics</h3><p>Tracking devices and supporting connections for your chosen fleet platform.</p></article>
           <article class="card"><span>03 / COMPLIANCE</span><h3>ELD installations</h3><p>Electronic logging devices installed with attention to placement and service access.</p></article>
-          <article class="card"><span>04 / VEHICLES</span><h3>Other electronics</h3><p>Backup cameras, side cameras, driver monitoring and troubleshooting.</p></article>
+          <article class="card"><span>04 / VEHICLES</span><h3>Vehicle electronics</h3><p>Backup cameras, side cameras, driver monitoring and troubleshooting.</p></article>
         </div>
       </div>
     </section>
@@ -122,12 +136,46 @@
       </div>
     </section>
 
+    <section class="content alternate" id="products">
+      <div class="wrap">
+        <p class="eyebrow">Coming soon</p>
+        <h2>Products and <em>hands-on reviews.</em></h2>
+        <div class="future"><h3>Recommended equipment</h3><p>We'll share products we recommend for specific installation needs, including which items are available from us. Ask about fit and availability when requesting service.</p></div>
+        <div class="future"><h3>Video reviews</h3><p>Our YouTube reviews will show how selected products work and what to consider before installation. We'll add links as videos are published.</p></div>
+      </div>
+    </section>
+
     <section class="content about" id="about">
       <div class="wrap">
         <p class="eyebrow">About Dash 360</p>
-        <h2>Built for the field.</h2>
-        <p class="intro">Dash 360 Technologies focuses on mobile vehicle technology installation in the Tampa Bay area. We bring a hands-on service mindset to commercial fleet projects.</p>
+        <h2>We bring the installation to you.</h2>
+        <p class="intro">Dash 360 Technologies provides mobile vehicle electronics installation across the Tampa Bay area. We come to your fleet or personal vehicle and schedule installations around your needs.</p>
         <p>A <a href="https://torqservicegroup.com">TORQ Service Group</a> company.</p>
+      </div>
+    </section>
+
+    <section class="content request" id="request">
+      <div class="wrap">
+        <p class="eyebrow">Tell us about your project</p>
+        <h2>Request <em>service.</em></h2>
+        <p class="intro">Share a few details and we'll follow up about your equipment and installation needs.</p>
+        <form id="service-form" action="/api/request" method="post">
+          <label>Customer type *<select name="customerType" id="customer-type" required><option value="">Select one</option><option>Company</option><option>Private consumer</option></select></label>
+          <label id="company-field" hidden>Company name *<input name="company" id="company-name" maxlength="150" autocomplete="organization"></label>
+          <label>Your name *<input name="name" required maxlength="100" autocomplete="name"></label>
+          <label>Email *<input name="email" type="email" required maxlength="150" autocomplete="email"></label>
+          <label>Phone *<input name="phone" type="tel" required maxlength="40" autocomplete="tel"></label>
+          <label>Installation city or location *<input name="location" required maxlength="150"></label>
+          <label class="full">Vehicle type and quantity<input name="vehicle" maxlength="200" placeholder="For example: three delivery vans"></label>
+          <label>Service needed<select name="service"><option value="">Select one</option><option>Dash or AI cameras</option><option>GPS and telematics</option><option>ELD installation</option><option>Other vehicle electronics</option><option>Not sure yet</option></select></label>
+          <label>Equipment or product<input name="equipment" maxlength="300" placeholder="Brand, model, or help choosing"></label>
+          <label class="full">Describe the work requested *<textarea name="details" required maxlength="3000" rows="5" placeholder="Tell us what you need installed, any existing equipment, and your preferred timing."></textarea></label>
+          <label class="full" style="position:absolute;left:-9999px" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+          <div class="full cf-turnstile" data-sitekey="0x4AAAAAAFBbtxwOsR6vCmfb"></div>
+          <button class="button" type="submit">Send service request</button>
+          <p class="note">Please do not send payment information through this form.</p>
+          <p class="full" id="form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
 
@@ -135,7 +183,8 @@
       <div class="wrap">
         <p class="eyebrow" style="color:#38682b">Start a project</p>
         <h2>Tell us what your<br><em>fleet needs.</em></h2>
-        <p>Include your vehicle count, equipment or platform, installation location and desired timeline.</p>
+        <p>Use the service request form above, or reach us directly by email or phone.</p>
+        <a class="button" href="#request">Request service ↗</a>
         <a class="button" href="mailto:admin@torqservicegroup.com?subject=Dash%20360%20installation%20quote">Email for a quote ↗</a>
         <a class="phone" href="tel:+18133993099">(813) 399-3099</a>
       </div>
@@ -148,5 +197,52 @@
       <a href="https://torqservicegroup.com">TORQ Service Group ↗</a>
     </div>
   </footer>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script>
+    const form = document.getElementById('service-form');
+    const type = document.getElementById('customer-type');
+    const companyField = document.getElementById('company-field');
+    const companyName = document.getElementById('company-name');
+    const status = document.getElementById('form-status');
+
+    type.addEventListener('change', () => {
+      const isCompany = type.value === 'Company';
+      companyField.hidden = !isCompany;
+      companyName.required = isCompany;
+      if (!isCompany) companyName.value = '';
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      status.classList.remove('error');
+      status.textContent = 'Sending your request…';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || 'Request could not be sent.');
+        }
+
+        status.textContent = result.message;
+        form.reset();
+        companyField.hidden = true;
+        companyName.required = false;
+      } catch (error) {
+        status.classList.add('error');
+        status.textContent = error.message ||
+          'Could not send your request. Please email or call us directly.';
+      } finally {
+        button.disabled = false;
+        if (window.turnstile) window.turnstile.reset();
+      }
+    });
+  </script>
 </body>
 </html>
